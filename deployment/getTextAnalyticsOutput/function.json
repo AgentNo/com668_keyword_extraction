@@ -1,0 +1,13 @@
+{
+    "scriptFile": "__init__.py",
+    "bindings": [{
+        "type": "cosmosDBTrigger",
+        "name": "documents",
+        "direction": "in",
+        "leaseCollectionName": "leases",
+        "connectionStringSetting": "com668projectdb_DOCUMENTDB",
+        "databaseName": "publications",
+        "collectionName": "papers",
+        "createLeaseCollectionIfNotExists": true
+    }]
+}
