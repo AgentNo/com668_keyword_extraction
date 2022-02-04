@@ -30,11 +30,10 @@ def abstract_analysis(client, title, abstract):
             logging.info("\tName: ", entity.name, "\tId: ", entity.data_source_entity_id, "\tUrl: ", entity.url, "\n\tData Source: ", entity.data_source)
             logging.info("\tMatches:")
             for match in entity.matches:
-                logging.info("\t\tText:{}".format(match.text)
+                logging.info("\t\tText:{}".format(match.text))
                 logging.info("\t\tConfidence Score: {0:.2f}".format(match.confidence_score))
                 logging.info("\t\tOffset: {}".format(match.offset))
                 logging.info("\t\tLength: {}".format(match.length))
-
     except Exception as err:
         print("Encountered exception: {}".format(err))
 
@@ -49,3 +48,4 @@ def main(documents: func.DocumentList) -> str:
             title = document["title"]
             abstract = document["abstract"]
             abstract_analysis(client, title, abstract)
+            logging.info('Text analysis complete, writing output...')
