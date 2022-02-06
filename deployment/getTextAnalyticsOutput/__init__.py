@@ -1,4 +1,5 @@
 import logging
+import json
 import azure.functions as func
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
@@ -76,19 +77,43 @@ def get_linked_entities(client, title, abstract):
         return []
 
 
-def main(documents: func.DocumentList) -> str:
+def main(documents: func.DocumentList, doc: func.Out[func.Document]) -> str:
     logging.basicConfig(level="INFO")
     client = authenticate_client()
     if documents:
         for document in documents:
-            # TODO: Check here to make sure that documents that are already processed don't get processed twice
-            logging.info('Performing text analytics for document id: %s', document['id'])
-            if True:
+            logging.info('Received analytics request for document {}'.format(document['id']))
+            if len(document["keywords"]) == 0 and len(document["linked_topics"]) == 0:
+                logging.info('Performing text analytics for document {}'.format(document['id']))
                 title = document["title"]
                 abstract = document["abstract"]
                 logging.info('Searching for keywords...')
                 keywords = get_paper_keywords(client, title, abstract)
                 logging.info('Searching for linked entities...')
-                entites = get_linked_entities(client, title, abstract)
-        logging.info('Text analysis complete, writing output...')
-        # TODO: Write output to CosmosDB instance
+                linked_entities = get_linked_entities(client, title, abstract)
+
+                logging.info('Text analysis complete, writing output to Cosmos instance...')
+                # Formulate JSON and write output to Cosmos
+                publication = {
+                    "id": document['id'],
+                    "title": document['title'],
+                    "abstract": document['abstract'],
+                    "authors": document['authors'],
+                    "topics": document['topics'],
+                    "likes": document['likes'],
+                    "comments": document['comments'],
+                    "url": document['url'],
+                    "keywords": keywords,
+                    "linked_topics": linked_entities
+                }
+                new_document = json.dumps(publication)
+                try:
+                    doc.set(func.Document.from_json(new_document))
+                    logging.info('Document wrote successfully')
+                except Exception as err:
+                    logging.info('Encountered error: {}'.format(err))
+            else:
+                # Document has most likely already been processed, ignore this execution
+                logging.info("Document {} already processed, skipping execution...")
+        logging.info('Current document set completed')
+    logging.info('Execution completed successfully.')

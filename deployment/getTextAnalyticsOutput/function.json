@@ -1,13 +1,23 @@
 {
     "scriptFile": "__init__.py",
     "bindings": [{
-        "type": "cosmosDBTrigger",
-        "name": "documents",
-        "direction": "in",
-        "leaseCollectionName": "leases",
-        "connectionStringSetting": "com668projectdb_DOCUMENTDB",
-        "databaseName": "publications",
-        "collectionName": "papers",
-        "createLeaseCollectionIfNotExists": true
-    }]
+            "type": "cosmosDBTrigger",
+            "name": "documents",
+            "direction": "in",
+            "leaseCollectionName": "leases",
+            "connectionStringSetting": "com668projectdb_DOCUMENTDB",
+            "databaseName": "publications",
+            "collectionName": "papers",
+            "createLeaseCollectionIfNotExists": true
+        },
+        {
+            "type": "cosmosDB",
+            "direction": "out",
+            "name": "doc",
+            "databaseName": "publications",
+            "collectionName": "papers",
+            "createIfNotExists": "false",
+            "connectionStringSetting": "com668projectdb_DOCUMENTDB"
+        }
+    ]
 }

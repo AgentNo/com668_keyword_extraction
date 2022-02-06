@@ -12,6 +12,12 @@
             }
         }
     },
+    "extensions": {
+        "cosmosDB": {
+            "connectionMode": "Gateway",
+            "protocol": "Https"
+        }
+    },
     "extensionBundle": {
         "id": "Microsoft.Azure.Functions.ExtensionBundle",
         "version": "[2.*, 3.0.0)"
