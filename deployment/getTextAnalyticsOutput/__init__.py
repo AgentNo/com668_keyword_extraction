@@ -19,7 +19,6 @@ def get_paper_keywords(client, title, abstract):
     try:
         documents = [abstract, title]
         response = client.extract_key_phrases(documents = documents)[0]
-
         if not response.is_error and len(response.key_phrases) != 0:
             keywords = []
             for phrase in response.key_phrases:
@@ -47,19 +46,19 @@ def get_linked_entities(client, title, abstract):
         if not response.is_error and len(response.entities) != 0:
             logging.info("Found the following linked entities:\n")
             entities = []
-            for entity in response.entities:
+            for lentity in response.entities:
                 entity = dict()
                 matches = []
-                entity['name'] = str(entity.name)
-                entity['url'] = str(entity.url)
-                entity['data_source'] = str(entity.data_source)
-                for match in entity.matches:
+                entity['name'] = str(lentity.name)
+                entity['url'] = str(lentity.url)
+                entity['data_source'] = str(lentity.data_source)
+                for ematch in lentity.matches:
                     # TODO: Evaluate this and determine if any additional processing is needed to filter out useless links
                     match = dict()
-                    match['text'] = str(match.text)
-                    match['confidence_score'] = str(match.confidence_score)
-                    match['offset'] = str(match.offset)
-                    match['length'] = str(match.length)
+                    match['text'] = str(ematch.text)
+                    match['confidence_score'] = str(ematch.confidence_score)
+                    match['offset'] = str(ematch.offset)
+                    match['length'] = str(ematch.length)
                     matches.append(match)
                 entity['matches'] = matches
                 entities.append(entity)

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+# v.1.4 [13th February 2022]
+- Solved a naming issue with variables that prevented linked entity analysis from working properly
+
 # v.1.3 [6th February 2022]
 - Fixed a variable typo
 - Fixed an issue in main logic which incorrectly referenced the wrong dictionary, causing a crash on write
